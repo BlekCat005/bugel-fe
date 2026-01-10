@@ -47,7 +47,7 @@ export const profilDesa = {
   luasWilayah: "485 Ha",
   jumlahPenduduk: "4.250 Jiwa",
   jumlahKK: "1.120 KK",
-  kepalaDesa: "H. Ahmad Supriatna",
+  kepalaDesa: "Ruhimat",
   alamatKantor: "Jl. Raya Bugel No. 01, Desa Bugel, Kec. Ciawi, Kab. Tasikmalaya",
   telepon: "(0265) 123456",
   email: "desa.bugel@gmail.com",
@@ -80,7 +80,7 @@ Musyawarah ini membahas berbagai program prioritas pembangunan untuk tahun angga
 - Pengadaan alat pertanian untuk kelompok tani
 - Program bantuan sosial untuk warga kurang mampu
 
-Kepala Desa H. Ahmad Supriatna menyampaikan bahwa partisipasi aktif warga sangat diharapkan dalam setiap tahap pembangunan desa.`,
+Kepala Desa Ruhimat menyampaikan bahwa partisipasi aktif warga sangat diharapkan dalam setiap tahap pembangunan desa.`,
     gambar: news1,
     tanggal: "2025-01-06",
     penulis: "Admin Desa"

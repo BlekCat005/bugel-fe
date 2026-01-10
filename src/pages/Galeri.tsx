@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Layout } from "@/components/layout/Layout";
-import { galeriData } from "@/data/dummyData";
 import { X } from "lucide-react";
+import { getGaleri } from "@/lib/api";
+import type { GaleriFoto } from "@/data/dummyData";
 
 export default function Galeri() {
-  const [selectedImage, setSelectedImage] = useState<typeof galeriData[0] | null>(null);
+  const { data, isLoading, isError } = useQuery({ queryKey: ["galeri"], queryFn: getGaleri });
+  const galeriList = data || [];
+  const [selectedImage, setSelectedImage] = useState<GaleriFoto | null>(null);
 
   return (
     <Layout>
@@ -21,8 +25,17 @@ export default function Galeri() {
       {/* Grid Galeri */}
       <section className="py-12">
         <div className="container mx-auto px-4">
+          {isLoading && (
+            <p className="text-muted-foreground">Memuat galeri...</p>
+          )}
+          {isError && (
+            <p className="text-destructive">Galeri gagal dimuat. Coba beberapa saat lagi.</p>
+          )}
+          {!isLoading && !isError && galeriList.length === 0 && (
+            <p className="text-muted-foreground">Belum ada foto galeri.</p>
+          )}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {galeriData.map((foto) => (
+            {galeriList.map((foto) => (
               <button
                 key={foto.id}
                 onClick={() => setSelectedImage(foto)}

@@ -1,8 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { PengumumanCard } from "@/components/cards/PengumumanCard";
-import { pengumumanData } from "@/data/dummyData";
+import { useQuery } from "@tanstack/react-query";
+import { getPengumuman } from "@/lib/api";
 
 export default function Pengumuman() {
+  const { data, isLoading, isError } = useQuery({ queryKey: ["pengumuman"], queryFn: getPengumuman });
+  const pengumumanList = data || [];
+
   return (
     <Layout>
       {/* Header */}
@@ -18,8 +22,13 @@ export default function Pengumuman() {
       {/* Daftar Pengumuman */}
       <section className="py-12">
         <div className="container mx-auto px-4">
+          {isLoading && <p className="text-muted-foreground">Memuat pengumuman...</p>}
+          {isError && <p className="text-destructive">Pengumuman gagal dimuat.</p>}
+          {!isLoading && !isError && pengumumanList.length === 0 && (
+            <p className="text-muted-foreground">Belum ada pengumuman.</p>
+          )}
           <div className="mx-auto max-w-3xl space-y-4">
-            {pengumumanData.map((pengumuman) => (
+            {pengumumanList.map((pengumuman) => (
               <PengumumanCard key={pengumuman.id} pengumuman={pengumuman} />
             ))}
           </div>

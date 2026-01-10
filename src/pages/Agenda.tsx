@@ -1,8 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { AgendaCard } from "@/components/cards/AgendaCard";
-import { agendaData } from "@/data/dummyData";
+import { useQuery } from "@tanstack/react-query";
+import { getAgenda } from "@/lib/api";
 
 export default function Agenda() {
+  const { data, isLoading, isError } = useQuery({ queryKey: ["agenda"], queryFn: getAgenda });
+  const agendaList = data || [];
+
   return (
     <Layout>
       {/* Header */}
@@ -18,8 +22,13 @@ export default function Agenda() {
       {/* Daftar Agenda */}
       <section className="py-12">
         <div className="container mx-auto px-4">
+          {isLoading && <p className="text-muted-foreground">Memuat agenda...</p>}
+          {isError && <p className="text-destructive">Agenda gagal dimuat.</p>}
+          {!isLoading && !isError && agendaList.length === 0 && (
+            <p className="text-muted-foreground">Belum ada agenda.</p>
+          )}
           <div className="mx-auto max-w-3xl space-y-4">
-            {agendaData.map((agenda) => (
+            {agendaList.map((agenda) => (
               <AgendaCard key={agenda.id} agenda={agenda} />
             ))}
           </div>

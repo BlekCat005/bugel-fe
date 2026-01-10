@@ -5,9 +5,33 @@ import { Layout } from "@/components/layout/Layout";
 import { BeritaCard } from "@/components/cards/BeritaCard";
 import { AgendaCard } from "@/components/cards/AgendaCard";
 import { PengumumanCard } from "@/components/cards/PengumumanCard";
-import { profilDesa, beritaData, agendaData, pengumumanData } from "@/data/dummyData";
+import { profilDesa } from "@/data/dummyData";
+import { useQuery } from "@tanstack/react-query";
+import { getAgenda, getBerita, getPengumuman } from "@/lib/api";
 
 const Index = () => {
+  const {
+    data: beritaData,
+    isLoading: beritaLoading,
+    isError: beritaError,
+  } = useQuery({ queryKey: ["berita"], queryFn: getBerita });
+
+  const {
+    data: agendaData,
+    isLoading: agendaLoading,
+    isError: agendaError,
+  } = useQuery({ queryKey: ["agenda"], queryFn: getAgenda });
+
+  const {
+    data: pengumumanData,
+    isLoading: pengumumanLoading,
+    isError: pengumumanError,
+  } = useQuery({ queryKey: ["pengumuman"], queryFn: getPengumuman });
+
+  const beritaList = beritaData || [];
+  const agendaList = agendaData || [];
+  const pengumumanList = pengumumanData || [];
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -92,8 +116,13 @@ const Index = () => {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
+          {beritaLoading && <p className="text-muted-foreground">Memuat berita...</p>}
+          {beritaError && <p className="text-destructive">Berita gagal dimuat.</p>}
+          {!beritaLoading && !beritaError && beritaList.length === 0 && (
+            <p className="text-muted-foreground">Belum ada berita.</p>
+          )}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {beritaData.slice(0, 3).map((berita) => (
+            {beritaList.slice(0, 3).map((berita) => (
               <BeritaCard key={berita.id} berita={berita} />
             ))}
           </div>
@@ -122,7 +151,12 @@ const Index = () => {
                 </Link>
               </div>
               <div className="space-y-4">
-                {agendaData.slice(0, 2).map((agenda) => (
+                {agendaLoading && <p className="text-muted-foreground">Memuat agenda...</p>}
+                {agendaError && <p className="text-destructive">Agenda gagal dimuat.</p>}
+                {!agendaLoading && !agendaError && agendaList.length === 0 && (
+                  <p className="text-muted-foreground">Belum ada agenda.</p>
+                )}
+                {agendaList.slice(0, 2).map((agenda) => (
                   <AgendaCard key={agenda.id} agenda={agenda} />
                 ))}
               </div>
@@ -146,7 +180,12 @@ const Index = () => {
                 </Link>
               </div>
               <div className="space-y-4">
-                {pengumumanData.slice(0, 2).map((pengumuman) => (
+                {pengumumanLoading && <p className="text-muted-foreground">Memuat pengumuman...</p>}
+                {pengumumanError && <p className="text-destructive">Pengumuman gagal dimuat.</p>}
+                {!pengumumanLoading && !pengumumanError && pengumumanList.length === 0 && (
+                  <p className="text-muted-foreground">Belum ada pengumuman.</p>
+                )}
+                {pengumumanList.slice(0, 2).map((pengumuman) => (
                   <PengumumanCard key={pengumuman.id} pengumuman={pengumuman} />
                 ))}
               </div>

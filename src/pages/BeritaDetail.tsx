@@ -1,14 +1,33 @@
 import { useParams, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { beritaData } from "@/data/dummyData";
 import { Calendar, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getBeritaById } from "@/lib/api";
 
 export default function BeritaDetail() {
   const { id } = useParams();
-  const berita = beritaData.find((b) => b.id === id);
+  const {
+    data: berita,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["berita", id],
+    queryFn: () => getBeritaById(id || ""),
+    enabled: Boolean(id),
+  });
 
-  if (!berita) {
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-20 text-center text-muted-foreground">
+          Memuat berita...
+        </div>
+      </Layout>
+    );
+  }
+
+  if (isError || !berita) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-20 text-center">

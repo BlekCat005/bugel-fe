@@ -1,8 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { BeritaCard } from "@/components/cards/BeritaCard";
-import { beritaData } from "@/data/dummyData";
+import { useQuery } from "@tanstack/react-query";
+import { getBerita } from "@/lib/api";
 
 export default function Berita() {
+  const { data, isLoading, isError } = useQuery({ queryKey: ["berita"], queryFn: getBerita });
+  const beritaList = data || [];
+
   return (
     <Layout>
       {/* Header */}
@@ -18,8 +22,13 @@ export default function Berita() {
       {/* Daftar Berita */}
       <section className="py-12">
         <div className="container mx-auto px-4">
+          {isLoading && <p className="text-muted-foreground">Memuat berita...</p>}
+          {isError && <p className="text-destructive">Berita gagal dimuat.</p>}
+          {!isLoading && !isError && beritaList.length === 0 && (
+            <p className="text-muted-foreground">Belum ada berita.</p>
+          )}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {beritaData.map((berita) => (
+            {beritaList.map((berita) => (
               <BeritaCard key={berita.id} berita={berita} />
             ))}
           </div>

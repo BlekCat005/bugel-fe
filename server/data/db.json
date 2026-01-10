@@ -1,0 +1,122 @@
+{
+  "berita": [
+    {
+      "id": "b1",
+      "judul": "Musyawarah Desa Bahas Rencana Pembangunan 2025",
+      "ringkasan": "Pemerintah Desa Bugel menggelar musyawarah desa untuk membahas prioritas pembangunan tahun anggaran 2025.",
+      "konten": "Pada hari Senin, 6 Januari 2025, Pemerintah Desa Bugel menggelar Musyawarah Desa (Musdes) yang dihadiri oleh seluruh perangkat desa, BPD, tokoh masyarakat, dan perwakilan warga dari setiap dusun.\n\nMusyawarah ini membahas berbagai program prioritas pembangunan untuk tahun anggaran 2025, termasuk:\n- Pembangunan jalan desa sepanjang 2 km\n- Rehabilitasi gedung PAUD\n- Pengadaan alat pertanian untuk kelompok tani\n- Program bantuan sosial untuk warga kurang mampu\n\nPartisipasi aktif warga sangat diharapkan dalam setiap tahap pembangunan desa.",
+      "gambar": "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
+      "tanggal": "2025-01-06",
+      "penulis": "Admin Desa"
+    },
+    {
+      "id": "b2",
+      "judul": "Perbaikan Jalan Dusun Cibunar Dimulai",
+      "ringkasan": "Pemerintah desa memulai proyek perbaikan jalan sepanjang 1,5 km di Dusun Cibunar menggunakan dana desa.",
+      "konten": "Proyek perbaikan jalan desa di Dusun Cibunar resmi dimulai pada tanggal 3 Januari 2025 menggunakan anggaran Dana Desa tahun 2025. Perbaikan jalan sepanjang 1,5 km ini sangat dinanti oleh warga karena kondisi jalan sebelumnya rusak parah, terutama saat musim hujan.",
+      "gambar": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      "tanggal": "2025-01-03",
+      "penulis": "Admin Desa"
+    },
+    {
+      "id": "b3",
+      "judul": "Posyandu Lansia Rutin di Balai Desa",
+      "ringkasan": "Desa Bugel secara rutin mengadakan posyandu lansia untuk memantau kesehatan warga usia lanjut.",
+      "konten": "Program Posyandu Lansia di Desa Bugel terus berjalan secara rutin setiap minggu pertama setiap bulan. Kegiatan ini dilaksanakan di Balai Desa dan diikuti oleh sekitar 80 warga lansia. Kegiatan meliputi pemeriksaan tekanan darah, gula darah, konsultasi kesehatan, senam lansia, dan pemberian makanan tambahan.",
+      "gambar": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80",
+      "tanggal": "2025-01-05",
+      "penulis": "Admin Desa"
+    }
+  ],
+  "agenda": [
+    {
+      "id": "a1",
+      "judul": "Kerja Bakti Bersih Desa",
+      "deskripsi": "Gotong royong membersihkan lingkungan desa dalam rangka menyambut HUT RI.",
+      "tanggal": "2025-01-15",
+      "waktu": "07:00 - 11:00 WIB",
+      "lokasi": "Seluruh Dusun di Desa Bugel"
+    },
+    {
+      "id": "a2",
+      "judul": "Rapat Koordinasi Perangkat Desa",
+      "deskripsi": "Rapat bulanan seluruh perangkat desa untuk evaluasi program kerja dan perencanaan kegiatan bulan depan.",
+      "tanggal": "2025-01-20",
+      "waktu": "09:00 - 12:00 WIB",
+      "lokasi": "Balai Desa Bugel"
+    },
+    {
+      "tanggal": "2026-01-10",
+      "prioritas": "sedang",
+      "penulis": "Admin Desa",
+      "gambar": "https://placehold.co/800x450?text=Desa+Bugel",
+      "judul": "Jumsih",
+      "deskripsi": "Pembersihan masjid di hari jumat pagi",
+      "waktu": "06:00 - 07:00 WIB",
+      "lokasi": "Masjid DesaBugel",
+      "id": "2809da9f-26b2-404b-8f4c-926abc66e201"
+    }
+  ],
+  "pengumuman": [
+    {
+      "id": "p1",
+      "judul": "Pendaftaran Bantuan Sosial 2025",
+      "konten": "Warga yang memenuhi kriteria dapat mendaftarkan diri ke kantor desa dengan membawa KTP, KK, dan surat keterangan tidak mampu. Pendaftaran dibuka 10-20 Januari 2025.",
+      "tanggal": "2025-01-08",
+      "prioritas": "tinggi"
+    },
+    {
+      "id": "p2",
+      "judul": "Jadwal Pelayanan Selama Libur Nasional",
+      "konten": "Pelayanan administrasi desa tetap buka selama libur nasional dengan jam operasional terbatas (08:00 - 12:00 WIB).",
+      "tanggal": "2025-01-07",
+      "prioritas": "sedang"
+    },
+    {
+      "tanggal": "2026-01-10",
+      "prioritas": "sedang",
+      "penulis": "Admin Desa",
+      "gambar": "https://placehold.co/800x450?text=Desa+Bugel",
+      "judul": "Kegiatan Pramuka",
+      "konten": "Harap hadir",
+      "id": "ff33b7bd-592e-495b-bfe6-64678ae32512"
+    }
+  ],
+  "galeri": [
+    {
+      "id": "g1",
+      "judul": "Musyawarah Desa",
+      "gambar": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
+      "deskripsi": "Suasana musyawarah desa membahas program pembangunan",
+      "tanggal": "2025-01-06"
+    },
+    {
+      "id": "g2",
+      "judul": "Perbaikan Jalan",
+      "gambar": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
+      "deskripsi": "Proses perbaikan jalan di Dusun Cibunar",
+      "tanggal": "2025-01-03"
+    },
+    {
+      "id": "g3",
+      "judul": "Posyandu Lansia",
+      "gambar": "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=1200&q=80",
+      "deskripsi": "Kegiatan posyandu lansia rutin bulanan",
+      "tanggal": "2025-01-05"
+    },
+    {
+      "id": "g4",
+      "judul": "Panorama Desa Bugel",
+      "gambar": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      "deskripsi": "Panorama persawahan desa",
+      "tanggal": "2025-01-01"
+    },
+    {
+      "id": "fd1cb488-03d1-477a-be5a-bc4a4197b42f",
+      "judul": "Kegiatan Pramuka",
+      "deskripsi": "Deskripsi kegiatan pramuka",
+      "tanggal": "2026-01-10",
+      "gambar": "/uploads/1768017130738-8e6f0eac-e5bd-430d-a4bc-5c7693f3dfa1.jpg"
+    }
+  ]
+}
