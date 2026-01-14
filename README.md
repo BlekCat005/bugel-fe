@@ -1,73 +1,36 @@
-# Welcome to your Lovable project
+# Bugel Info Hub
 
-## Project info
+Monorepo ringan untuk frontend (Vite + React + TypeScript) dan backend (Express + MongoDB) yang sekarang dipisah folder supaya bisa di-deploy terpisah ke Vercel.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Struktur
+- Frontend: akar repo (Vite). Entrypoint Vite ada di [src/main.tsx](src/main.tsx).
+- Backend: folder [backend](backend). Entrypoint API ada di [backend/index.js](backend/index.js).
 
-## How can I edit this code?
+## Prasyarat
+- Node.js 18+ dan npm.
+- MongoDB URL untuk backend.
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
+## Menjalankan lokal
+### Frontend
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Backend
+```sh
+cd backend
+npm install
+npm run dev
+```
+Backend membaca konfigurasi dari berkas [.env](backend/.env) dengan variabel `DATABASE_URL`, `DB_NAME`, dan opsional `PORT` (default 4000).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Deploy ke Vercel
+1. Buat dua project terpisah di Vercel.
+2. Frontend: pilih root repo sebagai Project Root, jalankan build command `npm run build` dan output `dist` (default Vite).
+3. Backend: pilih folder `backend` sebagai Project Root, set Environment Variables (`DATABASE_URL`, `DB_NAME`, `PORT` jika perlu) dan start command `npm run start`.
+4. Atur `VITE_API_URL` di environment frontend agar menunjuk ke URL backend di Vercel.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Catatan lain
+- Upload file disimpan sementara di memori (multer memory storage) lalu disimpan di database dalam bentuk data URI.
+- Pastikan MongoDB cluster dapat diakses dari lingkungan Vercel yang digunakan.
