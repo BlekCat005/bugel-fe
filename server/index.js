@@ -1,215 +1,221 @@
+import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
 import multer from "multer";
 import crypto from "crypto";
+import mongoose from "mongoose";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 4000;
-const DATA_PATH = path.join(__dirname, "data", "db.json");
-const UPLOAD_DIR = path.join(__dirname, "uploads");
+const MONGO_URI = process.env.DATABASE_URL;
+const DB_NAME = process.env.DB_NAME || "bugel-info-hub";
+const PLACEHOLDER_IMAGE = "https://placehold.co/800x450?text=Desa+Bugel";
+
+if (!MONGO_URI) {
+	console.warn("DATABASE_URL not set. Set it in .env for MongoDB connection.");
+}
 
 const app = express();
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static(UPLOAD_DIR));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-await fs.mkdir(path.dirname(DATA_PATH), { recursive: true });
-await fs.mkdir(UPLOAD_DIR, { recursive: true });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
-    filename: (_req, file, cb) => {
-      const ext = path.extname(file.originalname) || ".bin";
-      cb(null, `${Date.now()}-${crypto.randomUUID()}${ext}`);
-    },
-  }),
-});
-
-const placeholderImage = "https://placehold.co/800x450?text=Desa+Bugel";
-
-async function readDb() {
-  try {
-    const raw = await fs.readFile(DATA_PATH, "utf8");
-    const parsed = JSON.parse(raw);
-    return {
-      berita: parsed.berita || [],
-      agenda: parsed.agenda || [],
-      pengumuman: parsed.pengumuman || [],
-      galeri: parsed.galeri || [],
-    };
-  } catch (err) {
-    if (err.code === "ENOENT") {
-      const emptyDb = { berita: [], agenda: [], pengumuman: [], galeri: [] };
-      await writeDb(emptyDb);
-      return emptyDb;
-    }
-    throw err;
-  }
+let connectPromise = null;
+async function ensureDb() {
+	if (mongoose.connection.readyState === 1) return;
+	if (!connectPromise) {
+		if (!MONGO_URI) throw new Error("DATABASE_URL env is required");
+		connectPromise = mongoose.connect(MONGO_URI, { dbName: DB_NAME });
+	}
+	await connectPromise;
 }
 
-async function writeDb(db) {
-  await fs.writeFile(DATA_PATH, JSON.stringify(db, null, 2), "utf8");
+function schemaFactory(fields) {
+	const schema = new mongoose.Schema(
+		{
+			_id: { type: String, default: () => crypto.randomUUID() },
+			...fields,
+		},
+		{ timestamps: true }
+	);
+
+	schema.set("toJSON", {
+		virtuals: true,
+		versionKey: false,
+		transform: (_doc, ret) => {
+			ret.id = ret._id;
+			delete ret._id;
+			return ret;
+		},
+	});
+	return schema;
 }
 
-const conditionalUpload = (req, res, next) => {
-  const contentType = req.headers["content-type"] || "";
-  if (contentType.includes("multipart/form-data")) {
-    return upload.single("file")(req, res, (err) => {
-      if (err) return res.status(400).json({ message: err.message });
-      return next();
-    });
-  }
-  return next();
-};
+const Berita = mongoose.model(
+	"Berita",
+	schemaFactory({
+		judul: { type: String, required: true },
+		ringkasan: { type: String, required: true },
+		konten: { type: String, required: true },
+		gambar: { type: String, default: PLACEHOLDER_IMAGE },
+		tanggal: { type: String, required: true },
+		penulis: { type: String, required: true },
+	})
+);
 
-function createCrudRoutes(resource) {
-  const base = `/api/${resource}`;
+const Agenda = mongoose.model(
+	"Agenda",
+	schemaFactory({
+		judul: { type: String, required: true },
+		deskripsi: { type: String, required: true },
+		tanggal: { type: String, required: true },
+		waktu: { type: String, required: true },
+		lokasi: { type: String, required: true },
+	})
+);
 
-  app.get(base, async (_req, res) => {
-    const db = await readDb();
-    res.json(db[resource] || []);
-  });
+const Pengumuman = mongoose.model(
+	"Pengumuman",
+	schemaFactory({
+		judul: { type: String, required: true },
+		konten: { type: String, required: true },
+		tanggal: { type: String, required: true },
+		prioritas: { type: String, enum: ["tinggi", "sedang", "rendah"], required: true },
+	})
+);
 
-  app.get(`${base}/:id`, async (req, res) => {
-    const db = await readDb();
-    const item = (db[resource] || []).find((entry) => entry.id === req.params.id);
-    if (!item) return res.status(404).json({ message: `${resource} tidak ditemukan` });
-    res.json(item);
-  });
+const Galeri = mongoose.model(
+	"Galeri",
+	schemaFactory({
+		judul: { type: String, required: true },
+		gambar: { type: String, default: PLACEHOLDER_IMAGE },
+		deskripsi: { type: String, required: true },
+		tanggal: { type: String, required: true },
+	})
+);
 
-  app.post(base, conditionalUpload, async (req, res) => {
-    const db = await readDb();
-    const payload = req.body || {};
-    const filePath = req.file ? `/uploads/${req.file.filename}` : payload.gambar;
+const Kontak = mongoose.model(
+	"Kontak",
+	schemaFactory({
+		nama: { type: String, required: true },
+		email: { type: String, required: true },
+		subjek: { type: String, required: true },
+		pesan: { type: String, required: true },
+		tanggal: { type: String, default: () => new Date().toISOString() },
+	})
+);
 
-    if (resource === "berita" && !filePath) {
-      return res.status(400).json({ message: "Gambar wajib diunggah" });
-    }
-
-    const newItem = {
-      ...payload,
-      gambar: filePath || placeholderImage,
-      id: crypto.randomUUID(),
-    };
-    db[resource] = [...(db[resource] || []), newItem];
-    await writeDb(db);
-    res.status(201).json(newItem);
-  });
-
-  app.put(`${base}/:id`, conditionalUpload, async (req, res) => {
-    const db = await readDb();
-    const list = db[resource] || [];
-    const index = list.findIndex((entry) => entry.id === req.params.id);
-    if (index === -1) return res.status(404).json({ message: `${resource} tidak ditemukan` });
-
-    const incomingPath = req.file ? `/uploads/${req.file.filename}` : req.body?.gambar;
-    const updated = {
-      ...list[index],
-      ...req.body,
-      id: list[index].id,
-      gambar: incomingPath || list[index].gambar || placeholderImage,
-    };
-
-    db[resource][index] = updated;
-    await writeDb(db);
-    res.json(updated);
-  });
-
-  app.delete(`${base}/:id`, async (req, res) => {
-    const db = await readDb();
-    const list = db[resource] || [];
-    const exists = list.some((entry) => entry.id === req.params.id);
-    if (!exists) return res.status(404).json({ message: `${resource} tidak ditemukan` });
-    db[resource] = list.filter((entry) => entry.id !== req.params.id);
-    await writeDb(db);
-    res.status(204).send();
-  });
+function pick(body, keys) {
+	return keys.reduce((acc, key) => {
+		if (body[key] !== undefined) acc[key] = body[key];
+		return acc;
+	}, {});
 }
 
-app.get("/api/galeri", async (_req, res) => {
-  const db = await readDb();
-  res.json(db.galeri || []);
+function toDataUri(file) {
+	if (!file) return undefined;
+	const mime = file.mimetype || "application/octet-stream";
+	return `data:${mime};base64,${file.buffer.toString("base64")}`;
+}
+
+function resolveImage(req, fallback) {
+	if (req.file) return toDataUri(req.file);
+	if (req.body?.gambar) return req.body.gambar;
+	return fallback;
+}
+
+function crudRoutes(name, Model, options) {
+	const base = `/api/${name}`;
+
+	app.get(base, async (_req, res) => {
+		await ensureDb();
+		const items = await Model.find().sort({ createdAt: -1 });
+		res.json(items.map((i) => i.toJSON()));
+	});
+
+	app.get(`${base}/:id`, async (req, res) => {
+		await ensureDb();
+		const item = await Model.findById(req.params.id);
+		if (!item) return res.status(404).json({ message: `${name} tidak ditemukan` });
+		res.json(item.toJSON());
+	});
+
+	app.post(base, upload.single("file"), async (req, res) => {
+		await ensureDb();
+		const data = pick(req.body || {}, options.fields);
+		if (options.allowImage) data.gambar = resolveImage(req, options.placeholder);
+		try {
+			const created = await Model.create(data);
+			res.status(201).json(created.toJSON());
+		} catch (err) {
+			res.status(400).json({ message: err.message });
+		}
+	});
+
+	app.put(`${base}/:id`, upload.single("file"), async (req, res) => {
+		await ensureDb();
+		const update = pick(req.body || {}, options.fields);
+		if (options.allowImage) {
+			const gambar = resolveImage(req);
+			if (gambar) update.gambar = gambar;
+		}
+		const updated = await Model.findByIdAndUpdate(req.params.id, update, { new: true });
+		if (!updated) return res.status(404).json({ message: `${name} tidak ditemukan` });
+		res.json(updated.toJSON());
+	});
+
+	app.delete(`${base}/:id`, async (req, res) => {
+		await ensureDb();
+		const deleted = await Model.findByIdAndDelete(req.params.id);
+		if (!deleted) return res.status(404).json({ message: `${name} tidak ditemukan` });
+		res.status(204).send();
+	});
+}
+
+crudRoutes("berita", Berita, {
+	fields: ["judul", "ringkasan", "konten", "tanggal", "penulis"],
+	allowImage: true,
+	placeholder: PLACEHOLDER_IMAGE,
 });
 
-app.get("/api/galeri/:id", async (req, res) => {
-  const db = await readDb();
-  const item = (db.galeri || []).find((entry) => entry.id === req.params.id);
-  if (!item) return res.status(404).json({ message: "Galeri tidak ditemukan" });
-  res.json(item);
+crudRoutes("agenda", Agenda, {
+	fields: ["judul", "deskripsi", "tanggal", "waktu", "lokasi"],
+	allowImage: false,
 });
 
-app.post("/api/galeri", conditionalUpload, async (req, res) => {
-  const db = await readDb();
-  const { judul, deskripsi, tanggal } = req.body;
-  const filePath = req.file ? `/uploads/${req.file.filename}` : req.body?.gambar;
-
-  if (!judul || !deskripsi) {
-    return res.status(400).json({ message: "Judul dan deskripsi wajib diisi" });
-  }
-
-  const newItem = {
-    id: crypto.randomUUID(),
-    judul,
-    deskripsi,
-    tanggal: tanggal || new Date().toISOString().split("T")[0],
-    gambar: filePath || placeholderImage,
-  };
-
-  db.galeri = [...(db.galeri || []), newItem];
-  await writeDb(db);
-  res.status(201).json(newItem);
+crudRoutes("pengumuman", Pengumuman, {
+	fields: ["judul", "konten", "tanggal", "prioritas"],
+	allowImage: false,
 });
 
-app.put("/api/galeri/:id", conditionalUpload, async (req, res) => {
-  const db = await readDb();
-  const list = db.galeri || [];
-  const index = list.findIndex((entry) => entry.id === req.params.id);
-  if (index === -1) return res.status(404).json({ message: "Galeri tidak ditemukan" });
-
-  const previous = list[index];
-  const incomingPath = req.file ? `/uploads/${req.file.filename}` : req.body?.gambar;
-  const updated = {
-    ...previous,
-    ...req.body,
-    gambar: incomingPath || previous.gambar || placeholderImage,
-    id: previous.id,
-  };
-
-  db.galeri[index] = updated;
-  await writeDb(db);
-  res.json(updated);
+crudRoutes("galeri", Galeri, {
+	fields: ["judul", "deskripsi", "tanggal"],
+	allowImage: true,
+	placeholder: PLACEHOLDER_IMAGE,
 });
 
-app.delete("/api/galeri/:id", async (req, res) => {
-  const db = await readDb();
-  const list = db.galeri || [];
-  const index = list.findIndex((entry) => entry.id === req.params.id);
-  if (index === -1) return res.status(404).json({ message: "Galeri tidak ditemukan" });
-
-  const [removed] = list.splice(index, 1);
-  db.galeri = list;
-  await writeDb(db);
-
-  if (removed?.gambar && removed.gambar.startsWith("/uploads/")) {
-    const absolutePath = path.join(UPLOAD_DIR, path.basename(removed.gambar));
-    fs.unlink(absolutePath).catch(() => {});
-  }
-
-  res.status(204).send();
+app.post("/api/kontak", async (req, res) => {
+	await ensureDb();
+	const { nama = "", email = "", subjek = "", pesan = "" } = req.body || {};
+	const trimmed = {
+		nama: nama.trim(),
+		email: email.trim(),
+		subjek: subjek.trim(),
+		pesan: pesan.trim(),
+	};
+	if (!trimmed.nama || !trimmed.email || !trimmed.subjek || !trimmed.pesan) {
+		return res.status(400).json({ message: "Semua field wajib diisi" });
+	}
+	const created = await Kontak.create({ ...trimmed, tanggal: new Date().toISOString() });
+	res.status(201).json(created.toJSON());
 });
 
-["berita", "agenda", "pengumuman"].forEach(createCrudRoutes);
-
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
+app.get("/health", async (_req, res) => {
+	const status = mongoose.connection.readyState === 1 ? "ok" : "connecting";
+	res.json({ status });
 });
 
 app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
+	console.log(`API server running on http://localhost:${PORT}`);
 });
