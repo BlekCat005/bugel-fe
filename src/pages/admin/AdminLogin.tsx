@@ -84,7 +84,7 @@ export default function AdminLogin() {
 
           <div className="mt-6 border-t-2 border-foreground pt-4">
             <p className="text-center text-sm text-muted-foreground">
-              Demo: admin@desabugel.id / admin123
+              Dibuat oleh KKN Unsil 12 Bugel
             </p>
           </div>
         </div>
