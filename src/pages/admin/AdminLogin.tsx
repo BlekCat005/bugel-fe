@@ -59,7 +59,7 @@ export default function AdminLogin() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="admin@desabugel.id"
+                placeholder="masukan email"
                 required
                 className="mt-1"
               />

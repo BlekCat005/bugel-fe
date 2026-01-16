@@ -96,7 +96,7 @@ export function Navbar() {
                 className="mt-2 flex items-center gap-3 border-t-2 border-foreground px-4 py-3 font-medium"
               >
                 <LogIn className="h-5 w-5" />
-                Login Admin
+                Login
               </Link>
             </div>
           </div>
