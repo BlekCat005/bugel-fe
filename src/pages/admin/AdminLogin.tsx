@@ -47,7 +47,7 @@ export default function AdminLogin() {
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center border-2 border-foreground bg-primary font-mono text-2xl font-bold text-primary-foreground">
               DB
             </div>
-            <h1 className="text-2xl font-bold">Login Admin</h1>
+            <h1 className="text-2xl font-bold">Login</h1>
             <p className="text-sm text-muted-foreground">Desa Bugel</p>
           </div>
 
