@@ -80,9 +80,9 @@ export default function Kontak() {
                   </div>
                   <div>
                     <h3 className="font-bold">Jam Operasional</h3>
-                    <p className="text-muted-foreground">Senin - Kamis: 08:00 - 15:00</p>
-                    <p className="text-muted-foreground">Jumat: 08:00 - 11:00</p>
-                    <p className="text-muted-foreground">Sabtu - Minggu: Tutup</p>
+                    <p className="text-muted-foreground">Senin - Sabtu: 08:00 - 14:00</p>
+                    
+                    <p className="text-muted-foreground">Minggu: Tutup</p>
                   </div>
                 </div>
               </div>

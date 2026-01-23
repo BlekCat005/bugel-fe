@@ -52,15 +52,12 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 shrink-0" />
-                <span className="opacity-80">Senin - Kamis: 08:00 - 15:00</span>
+                <span className="opacity-80">Senin - Sabtu: 08:00 - 14:00</span>
               </li>
+              
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 shrink-0" />
-                <span className="opacity-80">Jumat: 08:00 - 11:00</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Clock className="h-4 w-4 shrink-0" />
-                <span className="opacity-80">Sabtu - Minggu: Tutup</span>
+                <span className="opacity-80">Minggu: Tutup</span>
               </li>
             </ul>
           </div>
