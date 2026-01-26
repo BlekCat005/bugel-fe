@@ -98,7 +98,8 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t-2 border-primary-foreground pt-8 text-center text-sm opacity-80">
-          <p>© 2025 Desa Bugel, Kecamatan Ciawi, Kabupaten Tasikmalaya. Hak Cipta Dilindungi.</p>
+          <p>© 2025 KKN 12 Universitas Siliwangi Desa Bugel, Kecamatan Ciawi, Kabupaten Tasikmalaya. Hak Cipta Dilindungi.
+</p>
         </div>
       </div>
     </footer>

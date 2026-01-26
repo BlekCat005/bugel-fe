@@ -56,13 +56,16 @@ export const profilDesa = {
 Mayoritas penduduk Desa Bugel bermata pencaharian sebagai petani, dengan hasil utama berupa padi dan berbagai tanaman pertanian lainnya. Selain itu, sebagian masyarakat juga menggantungkan penghasilan dari kegiatan penjualan produk olahan lokal, seperti kecimpring, opak, dan gula aren, yang menjadi ciri khas sekaligus potensi ekonomi desa.
 
 Desa Bugel juga memiliki tradisi gotong royong yang masih sangat kuat. Hal ini tercermin dalam berbagai kegiatan kemasyarakatan, seperti kerja bakti, pengajian rutin, serta perayaan hari besar nasional maupun keagamaan.`,
-  visi: "Terwujudnya Desa Bugel yang Maju, Mandiri, dan Sejahtera Berdasarkan Nilai-Nilai Keagamaan dan Kearifan Lokal",
+  visi: "Mewujudkan Desa yang berkeadilan ,Religius,mandiri dan berbudaya",
   misi: [
-    "Meningkatkan kualitas pelayanan publik yang transparan dan akuntabel",
-    "Mengembangkan potensi ekonomi masyarakat melalui pemberdayaan UMKM dan pertanian",
-    "Membangun infrastruktur desa yang berkualitas dan merata",
+    "Meningkatkan produktivitas ekonomi masyarakat melalui program program pemerintah sesuai pengetahuan dan keterampilan masyarakat Desa Bugel",
+    "Mengembangkan potensi masyarakat Desa Bugel melalui pelatihan keterampilan  Khusus Demi menekan angka pengangguran",
+    "Meningkatkan Peran aktif Perempuan,Meningkatkan Kwalitas Sumber Daya Manusia dan Meningkatkan Pelayanan Kebutuhan Masyarakat  di Desa Bugel",
     "Meningkatkan kualitas pendidikan dan kesehatan masyarakat",
-    "Melestarikan budaya dan kearifan lokal desa"
+    "Mendukung segala kegiatan   keagamaan",
+    "Menumbuhkan Semangat gotong royong dan Swadaya Masyarakat Desa Bugel",
+    "Merawat Kearipan lokal  masyarakat Desa Bugel",
+    "Membangun Infrastruktur di Desa Bugel"
   ],
   heroImage: heroVillage
 };
