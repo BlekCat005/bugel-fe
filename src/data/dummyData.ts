@@ -50,7 +50,7 @@ export const profilDesa = {
   kepalaDesa: "Ruhimat",
   alamatKantor: "R48H+HPH, Bugel, Kec. Ciawi, Kabupaten Tasikmalaya, Jawa Barat 46156",
   telepon: "+62 857-9351-1482",
-  email: "desa.bugel@gmail.com",
+  email: "desabugel@gmail.com",
   deskripsi: `Desa Bugel merupakan salah satu desa yang terletak di Kecamatan Ciawi, Kabupaten Tasikmalaya, Provinsi Jawa Barat. Desa ini memiliki potensi alam yang indah dengan hamparan sawah serta lingkungan pegunungan yang masih asri.
 
 Mayoritas penduduk Desa Bugel bermata pencaharian sebagai petani, dengan hasil utama berupa padi dan berbagai tanaman pertanian lainnya. Selain itu, sebagian masyarakat juga menggantungkan penghasilan dari kegiatan penjualan produk olahan lokal, seperti kecimpring, opak, dan gula aren, yang menjadi ciri khas sekaligus potensi ekonomi desa.
